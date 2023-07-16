@@ -1,0 +1,234 @@
+#include <stdio.h>
+struct Node
+{
+    int data;
+    struct Node *link;
+};
+typedef struct Node *node;
+node create_node()
+{
+    node newnode;
+    newnode = (node)malloc(sizeof(struct Node));
+    if (newnode->link == NULL)
+    {
+        printf("Memory not allocated");
+    }
+    printf("Enter data");
+    scanf("%d", &newnode->data);
+    newnode->link = newnode;
+    return newnode;
+}
+
+node insert_end(node tail)
+{
+    node cur;
+    node newnode = create_node();
+    if (tail == NULL)
+    {
+        tail = newnode;
+    }
+    else
+    {
+        newnode->link = tail->link;
+        tail->link = newnode;
+        tail = newnode;
+    }
+    return tail;
+}
+
+node insert_front(node tail)
+{
+    node newnode = create_node();
+    newnode->link = tail->link;
+    tail->link = newnode;
+    return tail;
+}
+
+node delete_end(node tail)
+{
+    node cur, temp;
+    if (tail == NULL)
+    {
+        printf("Empty");
+    }
+    else if (tail->link == tail)
+    {
+        tail = NULL;
+        free(tail);
+        printf("Empty");
+    }
+    else
+    {
+        cur = tail->link;
+        while (cur->link != tail)
+        {
+            cur = cur->link;
+        }
+        cur->link = tail->link;
+        temp = tail;
+        tail = cur;
+        free(temp);
+    }
+    return tail;
+}
+
+node delete_front(node tail)
+{
+    node temp;
+    if (tail == NULL)
+    {
+        printf("Empty");
+    }
+    else if (tail->link == tail)
+    {
+        free(tail);
+        printf("Empty");
+    }
+    else
+    {
+        temp = tail->link;
+        tail->link = temp->link;
+
+        free(temp);
+        return tail;
+    }
+}
+
+int count(node tail)
+{
+    int c = 1;
+    node cur;
+    cur = tail->link;
+    while (cur != tail)
+    {
+        c++;
+        cur = cur->link;
+    }
+    printf("Count=%d", c);
+    return c;
+}
+
+node delete_pos(node tail, int c)
+{
+    int pos, i;
+    node prev = NULL;
+    node cur = tail->link;
+    printf("Enter pos: ");
+    scanf("%d", &pos);
+    if (pos == 0)
+    {
+        tail = delete_front(tail);
+    }
+    else
+    {
+        for (i = 0; i < pos; i++)
+        {
+            prev = cur;
+            cur = cur->link;
+        }
+        if (cur->link == tail->link)
+        {
+            tail = delete_end(tail);
+        }
+        else
+        {
+            prev->link = cur->link;
+
+            free(cur);
+        }
+    }
+    return tail;
+}
+node insert_pos(node tail)
+{
+    int pos, i;
+    node cur, prev = NULL;
+    node newnode = create_node();
+    cur = tail->link;
+    printf("Enter pos");
+    scanf("%d", &pos);
+    if (pos == 0)
+    {
+        tail = insert_front(tail);
+    }
+    else
+    {
+        for (i = 0; i < pos; i++)
+        {
+            prev = cur;
+            cur = cur->link;
+        }
+        if (cur->link == tail->link)
+        {
+            tail = insert_end(tail);
+        }
+        else
+        {
+            prev->link = newnode;
+            newnode->link = cur;
+        }
+    }
+    return tail;
+}
+void display(node tail)
+{
+    node cur;
+    if (tail == NULL)
+    {
+        printf("Empty");
+    }
+    else
+    {
+
+        cur = tail->link;
+        while (cur != tail)
+        {
+            printf("%d", cur->data);
+            cur = cur->link;
+        }
+
+        printf("%d", cur->data);
+    }
+}
+
+int main()
+{
+    node tail = NULL;
+    int ch, c;
+    while (1)
+    {
+        printf("Enter choice:\n");
+        scanf("%d", &ch);
+        switch (ch)
+        {
+        case 1:
+            tail = insert_end(tail);
+            break;
+        case 2:
+            display(tail);
+            break;
+        case 3:
+            tail = insert_front(tail);
+            break;
+        case 4:
+            tail = delete_end(tail);
+            break;
+        case 5:
+            tail = delete_front(tail);
+            break;
+        case 6:
+            c = count(tail);
+            break;
+        case 7:
+            tail = delete_pos(tail, c);
+            break;
+        case 8:
+            tail = insert_pos(tail);
+            break;
+        default:
+            printf("Invalid");
+            break;
+        }
+    }
+    return 0;
+}
