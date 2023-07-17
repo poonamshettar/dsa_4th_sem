@@ -1,0 +1,89 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+#define size 100
+struct queue
+{
+char data[size];
+int rear,front;
+};
+
+void enqueue(struct queue *qptr,char ch)
+{
+if(qptr->front==(qptr->rear+1)%size)
+{
+printf("Queue overflow");
+}
+else if(qptr->rear==-1&&qptr->front==-1)
+
+{
+qptr->rear=qptr->front=0;
+qptr->data[qptr->rear]=ch;
+}
+else
+{
+qptr->rear=(qptr->rear+1)%size;
+qptr->data[qptr->rear]=ch;
+}}
+
+char dequeue(struct queue *qptr)
+{
+    char ch;
+if(qptr->rear==-1&&qptr->front==-1)
+{
+printf("Queue underflow");
+    ch=0;
+    
+}
+else if(qptr->rear==qptr->front)
+{
+    ch=qptr->data[qptr->front];
+qptr->rear=qptr->front=-1;
+    
+}
+else
+{
+    ch=qptr->data[qptr->front];
+qptr->front=(qptr->front+1)%size;
+
+}
+    return ch;
+}
+
+
+int main() {
+char ch;
+    int n,i,c=0;
+    struct queue q;
+struct queue *qptr;
+    qptr=&q;
+qptr->front=qptr->rear=-1;
+    scanf("%d",&n);
+    for(i=0;i<n;i++)
+    {
+        scanf(" %c ",&ch);
+       enqueue(qptr,ch);
+    }
+    ch=dequeue(qptr);
+    while(qptr->front!=qptr->rear||ch!='G')
+    { 
+        
+        switch(ch)
+        {
+            case 'R':enqueue(qptr,'Y');
+                     c++;
+                     break;
+            case 'Y':enqueue(qptr,'G');
+                     c++;
+                     break;
+           
+        }
+        
+     ch=dequeue(qptr);
+    }
+    
+    printf("%d",c);
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */    
+    return 0;
+}

@@ -1,0 +1,156 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+struct Node 
+{
+    char name[20],id[20];
+    int p,h;
+    struct Node *link;
+};
+typedef struct Node *node;
+
+node create_node()
+{
+    node newnode=(node)malloc(sizeof(struct Node));
+    if(newnode==NULL)
+    {
+        printf("NA");
+    }
+    scanf("%s%s%d",newnode->id,newnode->name,&newnode->p);
+    newnode->h=50*newnode->p;
+    newnode->link=NULL;
+    return newnode;
+}
+
+node insert_end(node head)
+{ node cur;
+    node newnode=create_node();
+    if(head==NULL)
+    {
+        head=newnode;
+    }
+    else
+    {
+        cur=head;
+        while(cur->link!=NULL)
+        {
+            cur=cur->link;
+        }
+        cur->link=newnode;
+            
+    }
+    return head;
+}
+
+
+node delete_front(node head)
+{  node temp=head;
+    head=head->link;
+    free(temp);
+    return head;
+}
+
+node search_delete(node head,char search[20])
+{
+    int s=0;
+    node cur,prev;
+    
+    if(strcmp(head->name,search)==0&&head->link==NULL)
+    {
+        free(head);
+        head=NULL;
+        printf("deltetd");
+    }
+    else if(strcmp(head->name,search)==0)
+    {
+        head=delete_front(head);
+    }
+    else
+    {
+        prev=NULL;
+        cur=head;
+        while(cur!=NULL)
+        {
+            if(strcmp(cur->name,search)==0)
+            {
+                s=1;
+                break;
+            }
+            prev=cur;
+            cur=cur->link;
+        }
+        if(strcmp(cur->name,search)==0)
+        {
+            s=1;
+        }
+        if(s==1)
+        {
+            prev->link=cur->link;
+            free(cur);
+        }
+
+    }
+    return head;
+}
+
+int display(node head)
+{  int sum=0;
+    node cur=head;
+    while(cur!=NULL)
+    {
+        printf("%s %s %d %d\n",cur->id,cur->name,cur->p,cur->h);
+        sum+=cur->h;
+        cur=cur->link;
+    }
+    return sum;
+}
+
+void display1(node head)
+{
+    node cur=head;
+    while(cur!=NULL)
+    {
+      printf("%s %s %d %d\n",cur->id,cur->name,cur->p,cur->h);
+        cur=cur->link;
+    }
+}
+void check(node head,char search[20])
+{
+   node cur=head;
+    char s[20];
+    while(cur!=NULL)
+    {
+       
+            if(strcmp(cur->id,search)==0)
+            {
+                strcpy(cur->name,s);
+            }
+        cur=cur->link;
+}
+    printf("Car found. Owner name is %s",s);
+}
+int main() {
+ int n,i,sum,s,x;
+    node head=NULL;
+    char search1[20],search2[20],search[20];
+    scanf("%d",&n);
+    for(i=0;i<n;i++)
+    {
+        head=insert_end(head);
+    }
+    sum=display(head);
+    
+    printf("\n");
+   for(i=0;i<2;i++)
+   {
+       scanf("%s",search);
+       head=search_delete(head,search);
+   }
+    display1(head);
+    printf("%d",sum);
+    scanf("%s",search1);
+  check(head,search1);
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */    
+    return 0;
+}

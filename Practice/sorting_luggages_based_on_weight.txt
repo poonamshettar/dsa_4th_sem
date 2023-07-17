@@ -1,0 +1,104 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+
+struct Node
+{
+    char name[20],source[10],dest[10];
+    int id,wt;
+    struct Node *link;
+};
+typedef struct Node *node;
+
+node create_node()
+{
+    node newnode;
+    newnode=(node)malloc(sizeof(struct Node));
+    if(newnode==NULL)
+    {
+        printf("Not");
+    }
+    scanf("%d%s%s%s%d",&newnode->id,newnode->name,newnode->source,newnode->dest,&newnode->wt);
+    return newnode;
+    
+}
+node insert_end(node head)
+{
+    node cur,newnode;
+    newnode=create_node();
+    if(head==NULL)
+    {
+        head=newnode;
+    }
+    else {
+        cur=head;
+        while(cur->link!=NULL)
+        {
+            cur=cur->link;
+        }
+        cur->link=newnode;
+    }
+    return head;
+}
+void display(node head)
+{
+    node cur;
+    int min=head->wt;
+    cur=head;
+       while(cur!=NULL)
+    {if(cur->wt<30)
+    {
+         printf("%d %s %s %s %d\n",cur->id,cur->name,cur->source,cur->dest,cur->wt);
+        
+    }cur=cur->link;
+    }
+    printf("\n");
+    cur=head;
+    while(cur!=NULL)
+    {
+      if(cur->wt>30)
+     {
+          printf("%d %s %s %s %d\n",cur->id,cur->name,cur->source,cur->dest,cur->wt);
+     }
+    cur=cur->link;
+    }
+    
+    cur=head;
+    while(cur!=NULL)
+    {
+        if(cur->wt<min)
+        {
+            min=cur->wt;
+        }
+        cur=cur->link;
+    }
+    printf("\n");
+    cur=head;
+    while(cur!=NULL)
+    {
+        if(cur->wt==min)
+        {
+            printf("%d %s %s %s %d\n",cur->id,cur->name,cur->source,cur->dest,cur->wt);
+        }
+        cur=cur->link;
+    }
+}
+
+
+
+
+int main() {
+    int n,i;
+    node head=NULL;
+    scanf("%d",&n);
+    for(i=0;i<n;i++)
+    {
+       head=insert_end(head); 
+    }
+    display(head);
+
+
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */    
+    return 0;
+}
